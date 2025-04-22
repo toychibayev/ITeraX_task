@@ -68,8 +68,9 @@ class _AlfatihapageState extends State<Alfatihapage>
       return;
     }
 
-    final dir = await getTemporaryDirectory();
-    final path = '${dir.path}/qiroat.aac';
+    final dir = await getApplicationDocumentsDirectory();
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final path = '${dir.path}/fatiha_qiroat_$timestamp.aac';
     _filePath = path;
 
     await _recorder.startRecorder(toFile: path, codec: fs.Codec.aacADTS);
@@ -260,9 +261,10 @@ class _AlfatihapageState extends State<Alfatihapage>
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Yuborildi!")),
-                        );
+                        if (_filePath != null &&
+                            File(_filePath!).existsSync()) {
+                          Navigator.pop(context, _filePath);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,

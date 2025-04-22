@@ -1,9 +1,13 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quran_ap/screens/alFatihaPage.dart';
 
 class SentContainerWidget extends StatelessWidget {
-  const SentContainerWidget({super.key});
+  final Function(String)? onRecordingComplete;
+
+  const SentContainerWidget({super.key, this.onRecordingComplete});
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +31,15 @@ class SentContainerWidget extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              final result = await Navigator.push<String>(
                 context,
-                MaterialPageRoute(builder: (context) => Alfatihapage()),
+                MaterialPageRoute(builder: (context) => const Alfatihapage()),
               );
+
+              if (result != null && onRecordingComplete != null) {
+                onRecordingComplete!(result);
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF2ECC71),
